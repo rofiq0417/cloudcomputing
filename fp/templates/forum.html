@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum Diskusi</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e5ddd5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background-color: #128C7E;
+            color: white;
+            margin: 0;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            padding: 10px;
+            overflow-y: auto;
+            height: 70vh;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 20px;
+        }
+
+        .message.user {
+            justify-content: flex-start; /* Align user messages to the left */
+            background-color: #DCF8C6;
+        }
+
+        .message.admin {
+            justify-content: flex-end; /* Align admin messages to the right */
+            background-color: #f0f0f0;
+        }
+
+        .message p {
+            margin: 0;
+            padding: 5px 10px;
+            border-radius: 12px;
+            max-width: 70%;
+        }
+
+        .message.user p {
+            background-color: #34b7f1;
+            color: white;
+        }
+
+        .message.admin p {
+            background-color: #e6e6e6;
+            color: #333;
+        }
+
+        .message small {
+            font-size: 0.8em;
+            color: #999;
+            margin-left: 10px;
+        }
+
+        .form-container {
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        textarea {
+            width: 80%;
+            height: 50px;
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #128C7E;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #075e54;
+        }
+
+        .profile {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #34b7f1;
+            margin-right: 10px;
+        }
+        body { font-family: Arial, sans-serif; }
+        .chat-container { display: flex; flex-direction: column; height: 90vh; border: 1px solid #ccc; padding: 10px; }
+        .messages { flex: 1; overflow-y: auto; }
+        .input { display: flex; }
+        .input input { flex: 1; padding: 10px; }
+        .input button { padding: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Welcome, {{ user[0] }}</h2>
+    <a href="/logout">Logout</a>
+    <div class="chat-container">
+        <div class="messages">
+            {% for msg in messages %}
+                <p><b>{{ msg[1] }}</b>: {{ msg[0] }} <i>({{ msg[2] }})</i></p>
+            {% endfor %}
+        </div>
+        <div class="input">
+            <input type="text" id="message" placeholder="Type your message">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            fetch('/send_message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            }).then(() => location.reload());
+        }
+    </script>
+</body>
+</html>
